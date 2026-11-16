@@ -1,0 +1,104 @@
+<!DOCTYPE html>
+<html lang="uk">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Навчальні нотатки (Second Brain)</title>
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+  <div class="container">
+    <header>
+      <h1>Навчальні нотатки</h1>
+      <p class="subtitle">Простий інструмент для фіксації знань та конспектів</p>
+    </header>
+
+    <main>
+      <!-- Секція форми створення нотатки -->
+      <section class="card form-section" aria-labelledby="form-heading">
+        <h2 id="form-heading">Додати нову нотатку</h2>
+        
+        <form id="note-form" novalidate>
+          <div class="form-group">
+            <label for="note-title">Заголовок нотатки <span class="required">*</span></label>
+            <input 
+              type="text" 
+              id="note-title" 
+              name="title" 
+              placeholder="Наприклад: Основи асинхронності в JavaScript" 
+              required
+              maxlength="120"
+            >
+            <span class="error-msg" id="title-error" aria-live="polite"></span>
+          </div>
+
+          <div class="form-row">
+            <div class="form-group">
+              <label for="note-subject">Предмет / Категорія <span class="required">*</span></label>
+              <input 
+                type="text" 
+                id="note-subject" 
+                name="subject" 
+                placeholder="Наприклад: Програмування, Математика, Англійська" 
+                required
+                maxlength="60"
+              >
+              <span class="error-msg" id="subject-error" aria-live="polite"></span>
+            </div>
+
+            <div class="form-group">
+              <label for="note-tags">Теги <span class="optional">(через кому)</span></label>
+              <input 
+                type="text" 
+                id="note-tags" 
+                name="tags" 
+                placeholder="js, promises, web"
+                maxlength="100"
+              >
+            </div>
+          </div>
+
+          <div class="form-group">
+            <label for="note-content">Зміст нотатки <span class="required">*</span></label>
+            <textarea 
+              id="note-content" 
+              name="content" 
+              rows="6" 
+              placeholder="Введіть основні тези, конспект або корисну інформацію..." 
+              required
+            ></textarea>
+            <span class="error-msg" id="content-error" aria-live="polite"></span>
+          </div>
+
+          <div class="form-actions">
+            <button type="submit" id="submit-btn" class="btn btn-primary">Зберегти нотатку</button>
+            <button type="reset" id="reset-btn" class="btn btn-secondary">Очистити</button>
+          </div>
+        </form>
+      </section>
+
+      <!-- Секція списку нотаток -->
+      <section class="card list-section" aria-labelledby="notes-heading">
+        <div class="list-header">
+          <h2 id="notes-heading">Збережені нотатки (<span id="notes-count">0</span>)</h2>
+        </div>
+
+        <div id="notes-list" class="notes-list" role="feed" aria-busy="false">
+          <!-- Контент генерується динамично через app.js -->
+        </div>
+
+        <div id="empty-state" class="empty-state">
+          <p>Поки що немає жодної збереженої нотатки.</p>
+          <p class="hint">Заповніть форму вище, щоб додати свій перший запис.</p>
+        </div>
+      </section>
+    </main>
+
+    <footer>
+      <p>Локальне збереження через LocalStorage &bull; Second Brain</p>
+    </footer>
+  </div>
+
+  <script src="app.js"></script>
+</body>
+</html>
