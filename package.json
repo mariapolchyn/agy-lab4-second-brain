@@ -1,0 +1,19 @@
+{
+  "name": "agy-lab4-second-brain",
+  "version": "1.0.0",
+  "description": "Local-First Second Brain for Students with PARA and Wikilinks",
+  "main": "src/server.js",
+  "scripts": {
+    "start": "node src/server.js",
+    "test": "node tests/test-store.js && node tests/test-server.js"
+  },
+  "keywords": [
+    "second-brain",
+    "local-first",
+    "para",
+    "markdown",
+    "wikilinks"
+  ],
+  "author": "",
+  "license": "MIT"
+}
