@@ -1,0 +1,207 @@
+<!DOCTYPE html>
+<html lang="uk">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Second Brain — Персональна база знань</title>
+  <link rel="stylesheet" href="/style.css">
+</head>
+<body>
+  <div class="app-layout">
+    <!-- Ліва бічна панель: навігація, пошук, фільтри, список нотаток -->
+    <aside class="sidebar" id="sidebar">
+      <header class="sidebar-header">
+        <div class="brand">
+          <span class="brand-icon">🧠</span>
+          <div class="brand-text">
+            <h1>Second Brain</h1>
+            <span class="brand-subtitle">Local-First Knowledge Base</span>
+          </div>
+        </div>
+        <button id="btn-new-note" class="btn btn-primary" title="Створити нову нотатку">
+          <span class="icon">+</span> Нова нотатка
+        </button>
+      </header>
+
+      <!-- Панель швидкого пошуку -->
+      <div class="search-box">
+        <span class="search-icon">🔍</span>
+        <input type="text" id="search-input" placeholder="Пошук за назвою, вмістом, тегами..." autocomplete="off">
+        <button id="search-clear" class="btn-icon" title="Очистити пошук" style="display: none;">✕</button>
+      </div>
+
+      <!-- Вкладки категорій PARA -->
+      <section class="para-section">
+        <div class="section-title">Категорії PARA</div>
+        <nav class="para-nav" id="para-nav">
+          <button class="para-tab active" data-category="All">
+            <span class="para-name">Всі нотатки</span>
+            <span class="badge" id="count-all">0</span>
+          </button>
+          <button class="para-tab" data-category="Inbox">
+            <span class="para-name">📥 Inbox</span>
+            <span class="badge" id="count-inbox">0</span>
+          </button>
+          <button class="para-tab" data-category="Projects">
+            <span class="para-name">🚀 Projects</span>
+            <span class="badge" id="count-projects">0</span>
+          </button>
+          <button class="para-tab" data-category="Areas">
+            <span class="para-name">🎯 Areas</span>
+            <span class="badge" id="count-areas">0</span>
+          </button>
+          <button class="para-tab" data-category="Resources">
+            <span class="para-name">📚 Resources</span>
+            <span class="badge" id="count-resources">0</span>
+          </button>
+          <button class="para-tab" data-category="Archives">
+            <span class="para-name">📦 Archives</span>
+            <span class="badge" id="count-archives">0</span>
+          </button>
+        </nav>
+      </section>
+
+      <!-- Хмара тегів -->
+      <section class="tags-section">
+        <div class="section-title">
+          <span>Теги</span>
+          <button id="btn-clear-tag" class="btn-link" style="display: none;">скинути фільтр</button>
+        </div>
+        <div class="tags-cloud" id="tags-cloud">
+          <!-- Теги додаються динамічно -->
+        </div>
+      </section>
+
+      <!-- Список нотаток -->
+      <section class="notes-list-section">
+        <div class="notes-list-header">
+          <span id="notes-count-label">Нотатки (0)</span>
+        </div>
+        <div class="notes-list" id="notes-list">
+          <!-- Елементи списку нотаток -->
+        </div>
+      </section>
+    </aside>
+
+    <!-- Основна область перегляду та редагування -->
+    <main class="main-content" id="main-content">
+      <!-- Стан: перегляд нотатки -->
+      <article class="note-view" id="note-view">
+        <div class="view-placeholder" id="view-placeholder">
+          <div class="placeholder-icon">📖</div>
+          <h2>Оберіть нотатку зі списку</h2>
+          <p>Або створіть нову нотатку для додавання знань у ваш Second Brain.</p>
+        </div>
+
+        <div class="note-content-wrapper" id="note-content-wrapper" style="display: none;">
+          <header class="note-header">
+            <div class="note-meta-badges">
+              <span class="category-badge" id="view-category"></span>
+              <span class="status-badge" id="view-status"></span>
+              <span class="type-badge" id="view-type"></span>
+            </div>
+            <h1 class="note-title" id="view-title"></h1>
+            <div class="note-source" id="view-source-wrapper" style="display: none;">
+              <strong>Джерело:</strong> <span id="view-source"></span>
+            </div>
+            <div class="note-tags" id="view-tags"></div>
+            <div class="note-actions">
+              <span class="note-dates" id="view-dates"></span>
+              <button id="btn-edit-note" class="btn btn-secondary">
+                ✏️ Редагувати
+              </button>
+            </div>
+          </header>
+
+          <hr class="divider">
+
+          <!-- Відрендерений текст Markdown -->
+          <div class="markdown-body" id="view-body"></div>
+
+          <!-- Блок зворотних зв'язків (Backlinks) -->
+          <section class="backlinks-container" id="backlinks-container">
+            <h3 class="backlinks-title">
+              🔗 Зворотні посилання (Backlinks)
+              <span class="badge" id="backlinks-count">0</span>
+            </h3>
+            <div class="backlinks-list" id="backlinks-list">
+              <p class="text-muted">Немає інших нотаток, які посилаються на цю тему.</p>
+            </div>
+          </section>
+        </div>
+      </article>
+
+      <!-- Стан: форма створення / редагування нотатки -->
+      <section class="note-editor" id="note-editor" style="display: none;">
+        <header class="editor-header">
+          <h2 id="editor-heading">Нова нотатка</h2>
+          <div class="editor-actions">
+            <button id="btn-cancel-edit" class="btn btn-secondary">Скасувати</button>
+            <button id="btn-save-note" class="btn btn-primary">Зберегти нотатку</button>
+          </div>
+        </header>
+
+        <form class="editor-form" id="editor-form">
+          <div class="form-row">
+            <div class="form-group flex-2">
+              <label for="edit-title">Заголовок нотатки *</label>
+              <input type="text" id="edit-title" placeholder="Наприклад: Метод зворотного поширення помилки" required>
+            </div>
+            <div class="form-group flex-1">
+              <label for="edit-category">Категорія PARA *</label>
+              <select id="edit-category" required>
+                <option value="Inbox">📥 Inbox</option>
+                <option value="Projects">🚀 Projects</option>
+                <option value="Areas">🎯 Areas</option>
+                <option value="Resources">📚 Resources</option>
+                <option value="Archives">📦 Archives</option>
+              </select>
+            </div>
+          </div>
+
+          <div class="form-row">
+            <div class="form-group flex-1">
+              <label for="edit-type">Тип</label>
+              <select id="edit-type">
+                <option value="concept">concept</option>
+                <option value="lecture">lecture</option>
+                <option value="lab">lab</option>
+                <option value="project">project</option>
+                <option value="resource">resource</option>
+                <option value="moc">moc</option>
+              </select>
+            </div>
+            <div class="form-group flex-1">
+              <label for="edit-status">Статус</label>
+              <select id="edit-status">
+                <option value="active">active</option>
+                <option value="inbox">inbox</option>
+                <option value="archived">archived</option>
+              </select>
+            </div>
+            <div class="form-group flex-2">
+              <label for="edit-tags">Теги (через кому)</label>
+              <input type="text" id="edit-tags" placeholder="архітектура, fpga, ml">
+            </div>
+          </div>
+
+          <div class="form-group">
+            <label for="edit-source">Джерело (першоджерело, книга, лекція)</label>
+            <input type="text" id="edit-source" placeholder="Лекція 3, Проф. Іваненко / Підручник...">
+          </div>
+
+          <div class="form-group flex-grow">
+            <div class="editor-label-row">
+              <label for="edit-content">Вміст у форматі Markdown (підтримує [[Назва нотатки]] та формули $$...$$)</label>
+              <span class="tip-text">Використовуйте [[Назва нотатки]] для створення зв'язків</span>
+            </div>
+            <textarea id="edit-content" placeholder="Пишіть конспект тут..."></textarea>
+          </div>
+        </form>
+      </section>
+    </main>
+  </div>
+
+  <script src="/app.js"></script>
+</body>
+</html>
